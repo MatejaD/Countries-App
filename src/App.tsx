@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react"
+import {BsMoonStars,BsSun} from 'react-icons/bs'
+import {BiSearchAlt} from 'react-icons/bi'
 
 const allCountriesAPI : string  = "https://restcountries.com/v3.1/all"
 
@@ -9,6 +11,8 @@ function App() {
   const [countriesNum,setCountriesNum] = useState <number> (8)
   const [page,setPage] = useState <number> (1)
   const [displayCountries,setDisplayCountries] = useState([])
+
+  const [darkMode,setDarkMode] = useState(false)
 
   const [inputValue,setInputValue] = useState('')
   const [optionValue,setOptionValue] = useState('')
@@ -58,31 +62,33 @@ function App() {
   return <main 
     onScroll={handleScroll}
     // style={{height:`${bodyHeight}vh`}}
-   className="w-screen min-h-screen overflow-y-scroll flex flex-col justify-start gap-10 pb-2 items-center bg-lightBg">
+   className={`w-screen min-h-screen overflow-y-scroll flex flex-col justify-start gap-10 pb-2 items-center font-Poppins ${darkMode? 'bg-darkBg' : 'bg-lightBg'}`}>
 
     {/* Navbar */}
-    <nav className="w-full h-14 flex justify-around items-center   bg-white">
-    <header>
+    <nav className={`w-full h-14 flex justify-around items-center ${darkMode? 'bg-navDark text-lightBg' : 'bg-white text-darkBg'}`}>
+    <header >
       <h1>Where in the world?</h1>
     </header>
-    <button className="w-36 h-full flex justify-between items-center ">
-    <span>Icon</span>
+    <button
+    onClick={() => setDarkMode(!darkMode)}
+     className="w-36 h-full flex justify-center gap-3 items-center ">
+    <span className="text-2xl">{darkMode? <BsMoonStars/>: <BsSun/>}</span>
     <h2>Dark Mode</h2>
     </button>
     </nav>
 
     <header className="w-11/12 h-20 flex justify-between items-center">
-    <div className="w-2/5 h-3/4 flex justify-between px-2 items-center bg-white">
+    <div className={`w-2/5 h-3/4 flex justify-between items-center px-2 rounded-sm  ${darkMode? 'bg-navDark text-white' : 'bg-white'}`}>
       <div className="h-full w-16 flex justify-center items-center">
 
-      <span>Icon</span>
+      <span className="text-xl"><BiSearchAlt/></span>
       </div>
       <input
       value={inputValue}
       onChange={(e) => search(e.target.value)}
        type="text" 
       placeholder="Search for a country..."
-      className="w-full h-2/3 px-2 outline-none " />
+      className={`w-full h-2/3 px-2 outline-none ${darkMode? 'bg-navDark' : 'bg-white'} `}/>
     </div>
 <form className="w-1/5 h-3/4 flex justify-center items-center">
 
@@ -105,29 +111,29 @@ function App() {
 
     <article
     style={{minHeight: '60vh'}}
-     className="w-11/12 grid grid-cols-4 gap-6  ">
+     className={`w-11/12 grid grid-cols-4 gap-6`}>
        {countries.length? countries.map((country) =>{
          return <div 
          style={{height:'55vh'}}
-         className="w-full  flex flex-col justify-start items-center gap-2 pb-2  bg-white">
+         className={`w-full  flex flex-col justify-start items-center gap-2 pb-2  ${darkMode? 'bg-navDark text-lightBg' : 'bg-white'}`}>
            <img className="w-full h-2/3" src={country.flags.png} alt="" />
            <div className="w-full h-1/3 flex flex-col justify-center gap-2 items-start px-4">
            <h2 className="text-xl font-bold">{country.name.common}</h2>
 
            <div className="w-full h-full ">
              <div className="w-full flex justify-start items-start gap-1">
-               <p  className="font-semibold">Population:</p>
+               <p  className="font-medium">Population:</p>
                <span>{country.population}</span>
              </div>
 
               <div className="w-full flex justify-start items-start gap-1">
-               <p  className="font-semibold">Region:</p>
+               <p  className="font-medium">Region:</p>
                <span>{country.region}</span>
              </div>
 
               <div className="w-full flex justify-start items-start gap-1">
-               <p className="font-semibold">Capital:</p>
-               <span className="text-gray">{country.capital}</span>
+               <p className="font-medium">Capital:</p>
+               <span className={`${darkMode? 'text-lightBg' : 'text-gray'}`}>{country.capital}</span>
              </div>
            </div>
 
